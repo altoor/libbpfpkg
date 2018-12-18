@@ -13,7 +13,12 @@ License:	LGPL-2.1
 URL:		https://github.com/libbpf/libbpf
 Source0:	%{kurl}linux-%{kver}.tar.gz
 
-BuildRequires: make gcc elfutils-libelf-devel python3-docutils
+BuildRequires: make gcc elfutils-libelf-devel
+%if 0%{?fedora} >= 29
+BuildRequires: python3-docutils
+%else
+BuildRequires: python2-docutils
+%endif
 
 %description
 helper library for ebpf user space manipulation
