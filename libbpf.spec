@@ -18,6 +18,7 @@ BuildRequires: make gcc elfutils-libelf-devel
 BuildRequires: python3-docutils
 %else
 BuildRequires: python2-docutils
+BuildRequires: python3
 %endif
 
 %description
