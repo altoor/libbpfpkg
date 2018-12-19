@@ -5,13 +5,14 @@
 
 Name:		libbpf
 Version:	0.0.1
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	ebpf library
 
 Group:		Development/Libraries
 License:	LGPL-2.1
 URL:		https://github.com/libbpf/libbpf
 Source0:	%{kurl}linux-%{kver}.tar.gz
+Source1:	if_vlan.h
 
 BuildRequires: make gcc elfutils-libelf-devel
 %if 0%{?fedora} >= 29
@@ -22,7 +23,7 @@ BuildRequires: python3
 %endif
 
 %description
-helper library for ebpf user space manipulation
+helpers library for eBPF program manipulation and interaction from user-space.
 
 %package devel
 Summary:	Libraries and header files for the libbpf library
@@ -35,7 +36,6 @@ resources needed for developing libbpf applications.
 
 %prep
 %setup -q -n linux-%{kver}
-
 
 %build
 ./scripts/bpf_helpers_doc.py \
@@ -63,6 +63,8 @@ ln -s libbpf.so.%{version} libbpf.so
 %{__install} -m 644 %{bpf_dir}/libbpf.h %{buildroot}%{_includedir}/bpf/
 %{__install} -m 644 %{bpf_dir}/bpf.h %{buildroot}%{_includedir}/bpf/
 %{__install} -m 644 tools/testing/selftests/bpf/bpf_helpers.h %{buildroot}%{_includedir}/bpf/
+# HACK: kernel uapi headers lack vlan definition add them here
+%{__install} -m 644 %{SOURCE1} %{buildroot}%{_includedir}/bpf/
 %{__install} -m 644 bpf-helpers.7 %{buildroot}%{_mandir}/man7/
 
 %files
@@ -74,5 +76,8 @@ ln -s libbpf.so.%{version} libbpf.so
 %doc %{_mandir}/man7/bpf-helpers.7*
 
 %changelog
+* Wed Dec 19 2018 Paolo Abeni <pabeni@redhat.com> - 0.0.1-2
+- added vlan header
+
 * Tue Dec 18 2018 Paolo Abeni <pabeni@redhat.com> - 0.0.1-1
 - first version
